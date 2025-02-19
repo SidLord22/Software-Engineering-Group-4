@@ -18,7 +18,7 @@ public class HomePage extends JFrame {
         setLayout(new CardLayout());
         
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(screenSize.width / 2, screenSize.height / 2);
+        setSize(screenSize.width /2 , screenSize.height / 2);
         setLocationRelativeTo(null);
         
         users = new HashMap<>();
@@ -28,22 +28,24 @@ public class HomePage extends JFrame {
         
         // Home Page Panel
         selectionPanel = new JPanel(new BorderLayout());
-        selectionPanel.setBackground(new Color(135, 206, 235));
+        selectionPanel.setBackground(new Color(46, 89, 132));
         
         titleLabel = new JLabel("Welcome!", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        titleLabel.setForeground(Color.white);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
         selectionPanel.add(titleLabel, BorderLayout.NORTH);
         
         titleHeading = new JLabel ("Please Select Your Role", SwingConstants.CENTER);
         titleHeading.setFont(new Font("Arial", Font.BOLD, 15));
+        titleHeading.setForeground(Color.white);
         titleHeading.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         selectionPanel.add(titleHeading, BorderLayout.SOUTH);
         
         
-        JPanel buttonPanel = new JPanel(new GridLayout(5, 1, 10, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(5, 10, 10, 20));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(80, 50, 10, 50));
-        buttonPanel.setBackground(new Color(135, 206, 235));
+        buttonPanel.setBackground(new Color(82, 138, 174));
         
         jobOwnerButton = new JButton("Job Owner");
         vehicleOwnerButton = new JButton("Vehicle Owner");
@@ -66,7 +68,7 @@ public class HomePage extends JFrame {
         
         // Login Panel
         loginPanel = new JPanel(new GridBagLayout());
-        loginPanel.setBackground(new Color(135, 206, 235));
+        loginPanel.setBackground(new Color(82, 138, 174));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         
@@ -108,9 +110,9 @@ public class HomePage extends JFrame {
         backToSelectionButton.addActionListener(e -> switchToSelection());
         loginPanel.add(backToSelectionButton, gbc);
         
-        // Registration Panel
+        // Create an Account Page
         registrationPanel = new JPanel(new GridBagLayout());
-        registrationPanel.setBackground(new Color(135, 206, 235));
+        registrationPanel.setBackground(new Color(82, 138, 174));
         
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -178,7 +180,7 @@ public class HomePage extends JFrame {
     private void styleSecondaryButton(JButton button) {
         button.setFont(new Font("Arial", Font.PLAIN, 14));
         button.setForeground(new Color(0, 0, 0));
-        button.setBackground(new Color (135, 206, 235));
+        button.setBackground(new Color (82, 138, 174));
         button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         button.setFocusPainted(false);
     }
@@ -188,3 +190,4 @@ public class HomePage extends JFrame {
         new HomePage(); 
     }
 }
+
