@@ -1,7 +1,7 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import javax.swing.*;
+import java.io.*;
 
 public class VehicleOwner {
     public static void main(String[] args) {
@@ -94,6 +94,51 @@ class VehicleInfo extends JFrame {
         JButton submitButton = new JButton("Submit");
         submitButton.setBounds(250, 240, 100, 40);
         add(submitButton);
+
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                saveVehicleInfo();
+            }
+        });
+
+        setVisible(true);
+    }
+
+    private void saveVehicleInfo() {
+        String ownerID = ownerIDField.getText().trim();
+        String vehicleInfo = vehicleInfoField.getText().trim();
+        String residencyTime = residencyTimeField.getText().trim();
+
+        if (ownerID.isEmpty() || vehicleInfo.isEmpty() || residencyTime.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (FileWriter fw = new FileWriter("vehicle_database.txt", true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            out.println(ownerID + "," + vehicleInfo + "," + residencyTime);
+            JOptionPane.showMessageDialog(this, "Vehicle information saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            ownerIDField.setText("");
+            vehicleInfoField.setText("");
+            residencyTimeField.setText("");
+            new JobList(); // Open JobList frame
+            dispose(); // Close VehicleInfo frame
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error saving vehicle information!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+
+class JobList extends JFrame {
+    JobList() {
+        setTitle("Available Jobs");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        JLabel message = new JLabel("No jobs available yet.");
+        add(message);
 
         setVisible(true);
     }
