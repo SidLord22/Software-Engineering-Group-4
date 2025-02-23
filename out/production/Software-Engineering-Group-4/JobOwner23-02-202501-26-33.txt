@@ -1,0 +1,7 @@
+#Job Owner Information entered at23-02-202501-26-33
+#Sun Feb 23 01:26:33 EST 2025
+Client\ ID=bjlkn
+Job\ Deadline=fr67y
+Job\ Duration=ftj
+Job\ Name=guib
+Timestamp=23-02-202501-26-33
