@@ -11,23 +11,16 @@ public class HomePage extends JFrame {
     private JPanel selectionPanel, loginPanel, registrationPanel;
     private JComboBox<String> roleComboBox;
     private HashMap<String, String> users;
-    private JPanel contentPane;
-    private CardLayout cardLayout;
 
     public HomePage() {
         setTitle("Vehicular Cloud Real Time System (VCRTS)");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Setting up CardLayout
-        cardLayout = new CardLayout();
-        contentPane = new JPanel(cardLayout);
-        setContentPane(contentPane);
+        setLayout(new CardLayout());
         
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(screenSize.width /2 , screenSize.height / 2);
         setLocationRelativeTo(null);
         
-        //Dummy user info
         users = new HashMap<>();
         users.put("user1", "pass1");
         users.put("user2", "pass2");
@@ -60,24 +53,18 @@ public class HomePage extends JFrame {
         createAccountButton = new JButton("Create an Account");
         styleSecondaryButton(createAccountButton);
         
-        //Where each button takes you
- 
-        // Andrea: I added the other frames into the home page where
-        // the user is able to select a role in the start of the home page,
-        // then is redirects them to either the vehicle owner login page 
-        // or the job owner login page. 
-        jobOwnerButton.addActionListener(e -> cardLayout.show(contentPane, "JobOwner"));
-        vehicleOwnerButton.addActionListener(e -> cardLayout.show(contentPane, "VehicleOwner"));
-        adminButton.addActionListener(e -> cardLayout.show(contentPane, "Login"));
-        createAccountButton.addActionListener(e -> cardLayout.show(contentPane, "Registration"));
-        
-        
         buttonPanel.add(jobOwnerButton);
         buttonPanel.add(vehicleOwnerButton);
         buttonPanel.add(adminButton);
         buttonPanel.add(createAccountButton);
         selectionPanel.add(buttonPanel, BorderLayout.CENTER);
         
+        
+        //Where each button takes you
+        jobOwnerButton.addActionListener(e -> switchToLogin());
+        vehicleOwnerButton.addActionListener(e -> switchToLogin());
+        adminButton.addActionListener(e -> switchToLogin());
+        createAccountButton.addActionListener(e -> switchToRegistration());
         
         // Login Panel
         loginPanel = new JPanel(new GridBagLayout());
@@ -120,10 +107,10 @@ public class HomePage extends JFrame {
         gbc.gridx = 1;
         gbc.gridy = 4;
         backToSelectionButton = new JButton("Back");
-        backToSelectionButton.addActionListener(e -> cardLayout.show(contentPane, "Selection"));
+        backToSelectionButton.addActionListener(e -> switchToSelection());
         loginPanel.add(backToSelectionButton, gbc);
         
-        // Create an Account/Registration Page
+        // Create an Account Page
         registrationPanel = new JPanel(new GridBagLayout());
         registrationPanel.setBackground(new Color(82, 138, 174));
         
@@ -162,23 +149,10 @@ public class HomePage extends JFrame {
         
         gbc.gridx = 0;
         backToLoginButton = new JButton("Back");
-        backToLoginButton.addActionListener(e -> cardLayout.show(contentPane, "Selection"));
+        backToLoginButton.addActionListener(e -> switchToSelection());
         registrationPanel.add(backToLoginButton, gbc);
         
-        // Add panels to CardLayout
-        contentPane.add(selectionPanel, "Selection");
-        contentPane.add(loginPanel, "Login");
-        contentPane.add(registrationPanel, "Registration");
-
-        // You need to create JobOwner and VehicleOwner as JPanels
-        contentPane.add(new JobOwner(this), "JobOwner");
-        contentPane.add(new VehicleOwner(this), "VehicleOwner");
-
-        // Show the selection panel first
-        cardLayout.show(contentPane, "Selection");
-        
-        
-        
+        add(selectionPanel);
         setVisible(true);
     }
     
@@ -201,7 +175,6 @@ public class HomePage extends JFrame {
         add(loginPanel);
         revalidate();
         repaint();
-      
     }
     
     private void styleSecondaryButton(JButton button) {
