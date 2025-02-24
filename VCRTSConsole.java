@@ -17,7 +17,7 @@ public class VCRTSConsole {
         new login();
     }
 }
-
+//Frontend Done by : Andrea Dass and Jinqing Mei
 //The login frame
 class login extends JFrame {
     JTextField emailField;
@@ -165,11 +165,14 @@ class VehicleInfo extends JFrame {
     }
      
 
+	
     /*
+    Jinqiing Mei + Matthew Ahamad
     Takes the info that the user submit and make a txt file of that information
+    For VehicleOwner users
     Contain all info that user submit regarding the vehicle and shows timestamp of when
     the info was inputted
-    Txt file uses fileCreationFinal
+    
      */
     private void saveVehicleInfo() {
         String ownerID = ownerIDField.getText().trim();
@@ -199,6 +202,7 @@ class VehicleInfo extends JFrame {
 }
 
 
+//Job Owner input Frame
 class JobOwnerInfo extends JFrame {
     JTextField clientIDField,jobNameField, jobDurationField, deadlineField;
 
@@ -262,10 +266,12 @@ class JobOwnerInfo extends JFrame {
     
 
     /*
+    Jinqing Mei + Matthew Ahamad
     Takes the info that the user submit and make a txt file of that information
+    For jobOwner users
     Contain all info that user submit regarding the vehicle and shows timestamp of when
     the info was inputted
-    Txt file uses fileCreationFinal
+    
      */
     private void saveClientInfo() {
         String clientID = clientIDField.getText().trim();
