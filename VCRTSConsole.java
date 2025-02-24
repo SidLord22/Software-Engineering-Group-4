@@ -5,13 +5,11 @@ import java.io.*;
 import java.util.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.awt.EventQueue;
 
 import javax.swing.border.EmptyBorder;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Color;
 
 //main class
 public class VCRTSConsole {
@@ -24,37 +22,60 @@ public class VCRTSConsole {
 class login extends JFrame {
     JTextField emailField;
     JPasswordField passwordField;
-    
+    JButton backButton, backToSelectionButton,backToLoginButton;
+    JLabel titleLabel, welcomeLabel, roleLabel, messageLabel, titleHeading;
+    JPanel loginPanel, registrationPanel, selectionPanel;
     
     
     
    login() {
-        setTitle("Login");
-        setSize(600, 400);
+	// Title of the frame/window
+        setTitle("Login"); 
+        
+        // Sizing and Operations of the frame
+        setSize(600,400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); //Centers the frame
         setLayout(null);
-      
-        JComboBox<String> c1;
-        String str[] = {"Vehicle Owner","Job Owner"};
-        c1 = new JComboBox<String>(str);
-        c1.setBounds(250, 90, 100, 40);
         
-        add(c1);
         
+        // Creating background panel with color
+        JPanel backgroundPanel = new JPanel();
+        backgroundPanel.setLayout(null);
+        backgroundPanel.setBackground(new Color(82,138,174));
+        backgroundPanel.setBounds(0,0,getWidth(),getHeight());
+        add(backgroundPanel);
+        
+        // Welcome Title
+        JLabel titleLabel = new JLabel("Welcome", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial",Font.BOLD,30));
+        titleLabel.setBounds(150,20,300,50);
+        backgroundPanel.add(titleLabel);
+        
+        // Dropdown Menu Role Selection & Designing
+        JLabel roleLabel = new JLabel("Select Role:");
+        roleLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        roleLabel.setBounds(225, 80, 150, 30);
+        backgroundPanel.add(roleLabel);
+        
+        JComboBox<String> roleDropdown = new JComboBox<>(new String[]{"Vehicle Owner", "Job Owner"});
+        roleDropdown.setBounds(225, 110, 150, 40);
+        roleDropdown.setFont(new Font("Arial", Font.PLAIN, 16));
+        roleDropdown.setBackground(Color.WHITE);
+        roleDropdown.setForeground(Color.BLACK);
+        roleDropdown.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        backgroundPanel.add(roleDropdown);
+        
+        // Login Button
         JButton loginButton = new JButton("Login");
         loginButton.setBounds(250, 180, 100, 40);
-        add(loginButton);
+        backgroundPanel.add(loginButton);
 
-        /*
-        JButton createAccountButton = new JButton("Create an Account");
-        createAccountButton.setBounds(230, 240, 150, 40);
-        add(createAccountButton);
-*/
         //When user presses button, change frame to VehicleInfo frame
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                String selectedItem = (String) c1.getSelectedItem();
+                String selectedItem = (String) roleDropdown.getSelectedItem(); 
                if (selectedItem.equals("Vehicle Owner")) {
                 	new VehicleInfo();
                 }
@@ -68,17 +89,24 @@ class login extends JFrame {
         setVisible(true);
     }
 }
+// End of login frame
+
+
 
 //Vehicle Info frame, where user enters the info of Vehicle
 class VehicleInfo extends JFrame {
     JTextField ownerIDField, makeField, modelField, vinField, residencyTimeField;
 
     VehicleInfo() {
+	// Title of the frame/window
         setTitle("Vehicle Information");
+        
+        // Sizing and Operations of the frame
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
 
+        // Owner ID label and Text Field
         JLabel ownerIDLabel = new JLabel("Owner ID:");
         ownerIDLabel.setBounds(150, 50, 100, 30);
         add(ownerIDLabel);
@@ -87,6 +115,7 @@ class VehicleInfo extends JFrame {
         ownerIDField.setBounds(250, 50, 200, 30);
         add(ownerIDField);
 
+        // Make Label and Text Field
         JLabel makeLabel = new JLabel("Make:");
         makeLabel.setBounds(150, 90, 100, 30);
         add(makeLabel);
@@ -95,6 +124,7 @@ class VehicleInfo extends JFrame {
         makeField.setBounds(250, 90, 200, 30);
         add(makeField);
 
+        // Model Label and Text Field
         JLabel modelLabel = new JLabel("Model:");
         modelLabel.setBounds(150, 130, 100, 30);
         add(modelLabel);
@@ -103,6 +133,7 @@ class VehicleInfo extends JFrame {
         modelField.setBounds(250, 130, 200, 30);
         add(modelField);
 
+        // VIN Label and Text Field
         JLabel vinLabel = new JLabel("VIN:");
         vinLabel.setBounds(150, 170, 100, 30);
         add(vinLabel);
@@ -111,6 +142,7 @@ class VehicleInfo extends JFrame {
         vinField.setBounds(250, 170, 200, 30);
         add(vinField);
 
+        // Residency Time Label and Text Field
         JLabel residencyTimeLabel = new JLabel("Residency Time:");
         residencyTimeLabel.setBounds(150, 210, 120, 30);
         add(residencyTimeLabel);
@@ -119,6 +151,7 @@ class VehicleInfo extends JFrame {
         residencyTimeField.setBounds(250, 210, 200, 30);
         add(residencyTimeField);
 
+        // Submit Button
         JButton submitButton = new JButton("Submit");
         submitButton.setBounds(250, 260, 100, 40);
         add(submitButton);
@@ -170,11 +203,15 @@ class JobOwnerInfo extends JFrame {
     JTextField clientIDField,jobNameField, jobDurationField, deadlineField;
 
     JobOwnerInfo() {
+    	// Title of the frame/window
         setTitle("Job Information");
+        
+        // Sizing and Operations of the frame
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
 
+        // Client ID Label and Text Field
         JLabel clientIDLabel = new JLabel("Client ID:");
         clientIDLabel.setBounds(150, 50, 100, 30);
         add(clientIDLabel);
@@ -183,7 +220,7 @@ class JobOwnerInfo extends JFrame {
         clientIDField.setBounds(250, 50, 200, 30);
         add(clientIDField);
         
-        //
+        // Job Name Label and Text Field
         JLabel jobNameLabel = new JLabel("Job Name:");
         jobNameLabel.setBounds(150, 90, 100, 30);
         add(jobNameLabel);
@@ -191,8 +228,8 @@ class JobOwnerInfo extends JFrame {
         jobNameField = new JTextField();
         jobNameField.setBounds(250, 90, 200, 30);
         add(jobNameField);
-        //
-
+        
+        //Job Duration Label and Text Field
         JLabel jobDurationLabel = new JLabel("Job Duration:");
         jobDurationLabel.setBounds(150, 130, 100, 30);
         add(jobDurationLabel);
@@ -201,6 +238,7 @@ class JobOwnerInfo extends JFrame {
         jobDurationField.setBounds(250, 130, 200, 30);
         add(jobDurationField);
         
+        // Deadline Label and Text Field
         JLabel deadlineLabel = new JLabel("Deadline:");
         deadlineLabel.setBounds(150, 170, 100, 30);
         add(deadlineLabel);
@@ -209,8 +247,7 @@ class JobOwnerInfo extends JFrame {
         deadlineField.setBounds(250, 170, 200, 30);
         add(deadlineField);
 
-
-
+        // Submit Button
         JButton submitButton = new JButton("Submit");
         submitButton.setBounds(250, 260, 100, 40);
         add(submitButton);
