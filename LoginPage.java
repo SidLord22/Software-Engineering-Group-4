@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class LoginPage extends JFrame{
-	JTextField emailField;
+    JTextField emailField;
     JPasswordField passwordField;
     JButton backButton, backToSelectionButton, backToLoginButton;
     JLabel titleLabel, welcomeLabel, roleLabel, messageLabel, titleHeading;
