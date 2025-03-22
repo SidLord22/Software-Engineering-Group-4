@@ -51,8 +51,10 @@ public class LoginPage extends JFrame{
                 String selectedItem = (String) roleDropdown.getSelectedItem();
                 if (selectedItem.equals("Vehicle Owner")) {
                     new vehicleOwner();
-                } else if (selectedItem.equals("Job Owner")) {
+                } else (selectedItem.equals("Job Owner")) {
                     new jobOwner();
+                } else if (selectedItem.equals("Cloud Controller")) {
+                    new cloudController();
                 }
             }
         });
