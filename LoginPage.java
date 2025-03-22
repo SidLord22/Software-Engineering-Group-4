@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class LoginPage extends JFrame{
-    JTextField emailField;
+	JTextField emailField;
     JPasswordField passwordField;
     JButton backButton, backToSelectionButton, backToLoginButton;
     JLabel titleLabel, welcomeLabel, roleLabel, messageLabel, titleHeading;
@@ -33,7 +33,7 @@ public class LoginPage extends JFrame{
         roleLabel.setBounds(225, 80, 150, 30);
         backgroundPanel.add(roleLabel);
 
-        JComboBox<String> roleDropdown = new JComboBox<>(new String[]{"Vehicle Owner", "Job Owner"});
+        JComboBox<String> roleDropdown = new JComboBox<>(new String[]{"Vehicle Owner", "Job Owner", "Cloud Controller"});
         roleDropdown.setBounds(225, 110, 150, 40);
         roleDropdown.setFont(new Font("Arial", Font.PLAIN, 16));
         roleDropdown.setBackground(Color.WHITE);
@@ -51,16 +51,16 @@ public class LoginPage extends JFrame{
                 String selectedItem = (String) roleDropdown.getSelectedItem();
                 if (selectedItem.equals("Vehicle Owner")) {
                     new vehicleOwner();
-                } else (selectedItem.equals("Job Owner")) {
+                } else if(selectedItem.equals("Job Owner")) {
                     new jobOwner();
-                } else if (selectedItem.equals("Cloud Controller")) {
+                }else if (selectedItem.equals("Cloud Controller")) {
                     new cloudController();
-                }
+            }
             }
         });
         setVisible(true);
     }
-    
+   
    
     
 }
