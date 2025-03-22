@@ -1,11 +1,9 @@
-import javax.swing.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 import java.util.Random;
 
-//The attributes of Job
 public class Job {
     private String jobID;
     private String jobName;
@@ -15,7 +13,7 @@ public class Job {
     private int jobDuration;
     private int redundancyLevel;
 
-  //A constructor
+    //Constructor for a Job class
     public Job(String jobID, String jobName, String description, String deadline, String jobOwnerID) {
         this.jobID = jobID;
         this.jobName = jobName;
@@ -25,24 +23,27 @@ public class Job {
         this.jobDuration = generateRandomDuration();
         this.redundancyLevel = generateRandomRedundancy();
     }
-  
-  //Generate a random number for the Job Duration, change this when we figure out how to get Job Duration
+
+    /* Generate a random Int for the duration of the Job, can be replaced when we have a
+        better way of getting the job duration
+     */
     private int generateRandomDuration() {
         return new Random().nextInt(30) + 1; // Random value between 1 and 30
     }
 
-  //Generate a random number for the Redundancy Level, change this when we figure out how to get Redundancy Level
+    /*
+    Same with the Redundancy level, generate random Int for the redundancy,
+    can be replaced when we have a better way of getting it
+     */
     private int generateRandomRedundancy() {
         return new Random().nextInt(5) + 1; // Random value between 1 and 5
     }
 
-  //Save the information to a txt file. It will create a file if the file does not exist, and if it does exist, then just put the information in the same file. 
-    public void saveToFile() {
+    //Saves the Job info to a file
+    public void saveToFileJob() {
         String filePath = createUpdateFile("JobRecords.txt");
-
         Properties properties = new Properties();
-        String timeStamp = stringDateTime();
-
+        String timeStamp = timeStampJob();
         properties.setProperty("Job_ID", jobID);
         properties.setProperty("Job_Name", jobName);
         properties.setProperty("Description", description);
@@ -61,14 +62,15 @@ public class Job {
         }
     }
 
-  //Create the file if it doe not exist, or update it with info if it exist
+    //Create a JobRecord file to store the data, or add the data to an existing file
     public static String createUpdateFile(String fileName) {
         String filePath = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + fileName;
         File file = new File(filePath);
         try {
             if (file.createNewFile()) {
                 System.out.println("File created: " + filePath);
-            } else {
+            }
+            else {
                 System.out.println("File exists, appending data.");
             }
         } catch (IOException e) {
@@ -78,8 +80,8 @@ public class Job {
         return filePath;
     }
 
-  //Method to make the timestamp
-    public static String stringDateTime() {
+    //Creates timestamp for when the info was registered
+    public static String timeStampJob() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss");
         return currentDateTime.format(formatter);
