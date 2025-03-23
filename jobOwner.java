@@ -158,7 +158,7 @@ public class jobOwner extends JFrame{
             return;
         }
         String filePath = FileCreationFinal.createFolder(fileName);
-        FileCreationFinal.jobOwnerFileCreate(filePath,firstName, lastName, jobName,clientID,jobDuration,deadline);
+        FileCreationFinal.jobOwnerFileCreate(filePath,clientID, firstName, lastName, jobName, jobDuration, deadline);
         JOptionPane.showMessageDialog(this, "Job information saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
         clientIDField.setText("");
         jobDurationField.setText("");
