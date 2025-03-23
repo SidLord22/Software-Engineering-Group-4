@@ -1,6 +1,7 @@
 import javax.swing.*;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -26,22 +27,21 @@ public class cloudController extends JFrame {
     backgroundPanel.setBounds(0, 0, getWidth(), getHeight());
     add(backgroundPanel);
     
+    JLabel titleLabel = new JLabel("Click Me For Data!", SwingConstants.CENTER);
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+    titleLabel.setBounds(150, 20, 300, 50);
+    backgroundPanel.add(titleLabel);
     
     JButton accessButton = new JButton("Access Jobs");
-    accessButton.setBounds(250, 180, 100, 40);
+    accessButton.setBounds(215, 180, 180, 40);
     backgroundPanel.add(accessButton);
     accessButton.addActionListener(e -> {
         JobSchedulerUI.main(null); 
     });
-    
-   
-    
+  
     setVisible(true);
 
 	}
-	
-
-
 	
 }
 
