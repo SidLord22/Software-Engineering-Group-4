@@ -189,12 +189,16 @@ public class vehicleOwner extends JFrame{
             outputStream.writeUTF(model);
             outputStream.writeUTF(vin);
             outputStream.writeUTF(residencyTime);
+            
+            JOptionPane.showMessageDialog(this, "Vehicle information saved sent to server!", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this , "Server failed to receive message" , "Error" , JOptionPane.ERROR_MESSAGE);
         }
 
+        dispose(); // Close VehicleInfo frame
+        new LoginPage();// Sends user back to login screen
 
         /* This is where you save the file, we do not use it yet since we want cloud controller to do the saving
 
