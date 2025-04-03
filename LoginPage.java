@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LoginPage extends JFrame{
 	JTextField emailField;
@@ -23,7 +24,7 @@ public class LoginPage extends JFrame{
         backgroundPanel.setBounds(0, 0, getWidth(), getHeight());
         add(backgroundPanel);
 
-        JLabel titleLabel = new JLabel("Welcome", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Client", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         titleLabel.setBounds(150, 20, 300, 50);
         backgroundPanel.add(titleLabel);
