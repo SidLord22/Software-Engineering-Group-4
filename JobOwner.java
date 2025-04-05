@@ -1,97 +1,195 @@
-import java.awt.EventQueue;
+import javax.swing.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JEditorPane;
-import javax.swing.JCheckBox;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
-import javax.swing.JLabel;
 import java.awt.Color;
-import javax.swing.JComboBox;
+import java.awt.event.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.ArrayList;
 
-public class JobOwner extends JFrame {
+public class jobOwner extends JFrame{
+	private String jobOwnerID;
+    private String firstName;
+    private String lastName;
+    private ArrayList<String> ownJobList;
+	JTextField clientIDField, firstNameField, lastNameField, jobNameField, jobDurationField, deadlineField;
+	
+	public jobOwner(String jobOwnerID, String firstName, String lastName) {
+        this.jobOwnerID = jobOwnerID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.ownJobList = new ArrayList<>();
+    }
 
-	private JPanel contentPane;
+    public String getJobOwnerID() {
+        return jobOwnerID;
+    }
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					JobOwner frame = new JobOwner();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public ArrayList<String> getOwnJobList() {
+        return ownJobList;
+    }
+
+    public void addJob(String jobID) {
+        ownJobList.add(jobID);
+    }
+	
+	public jobOwner() {
+		setTitle("Job Information");
+        
+        // Sizing and Operations of the frame
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(null);
+        
+        JPanel backgroundPanel = new JPanel();
+        backgroundPanel.setLayout(null);
+        backgroundPanel.setBackground(new Color(82, 138, 174));
+        backgroundPanel.setBounds(0, 0, getWidth(), getHeight());
+        add(backgroundPanel);
+
+        // Client ID Label and Text Field
+        JLabel clientIDLabel = new JLabel("Client ID:");
+        clientIDLabel.setBounds(50, 30, 150, 25);
+        backgroundPanel.add(clientIDLabel);
+
+        clientIDField = new JTextField();
+        clientIDField.setBounds(200, 30, 300, 25);
+        backgroundPanel.add(clientIDField);
+        
+        // Job Name Label and Text Field
+        JLabel jobNameLabel = new JLabel("Job Name:");
+        jobNameLabel.setBounds(50, 70, 150, 25);
+        backgroundPanel.add(jobNameLabel);
+        
+        jobNameField = new JTextField();
+        jobNameField.setBounds(200, 70, 300, 25);
+        backgroundPanel.add(jobNameField);
+        
+     // First Name Label and Text Field
+        JLabel firstNameLabel = new JLabel("First Name:");
+        firstNameLabel.setBounds(50, 110, 150, 25);
+        backgroundPanel.add(firstNameLabel);
+
+        firstNameField = new JTextField();
+        firstNameField.setBounds(200, 110, 300, 25);
+        backgroundPanel.add(firstNameField);
+        
+     // Last Name Label and Text Field
+        JLabel lastNameLabel = new JLabel("Last Name:");
+        lastNameLabel.setBounds(50, 150, 150, 25);
+        backgroundPanel.add(lastNameLabel);
+
+        lastNameField = new JTextField();
+        lastNameField.setBounds(200, 150, 300, 25);
+        backgroundPanel.add(lastNameField);
+        
+        //Job Duration Label and Text Field
+        JLabel jobDurationLabel = new JLabel("Job Duration:");
+        jobDurationLabel.setBounds(50, 190, 150, 25);
+        backgroundPanel.add(jobDurationLabel);
+        JLabel jobDuration2Label = new JLabel("(hh-mm-ss)");
+        jobDuration2Label.setBounds(50, 200, 100, 30);
+        backgroundPanel.add(jobDuration2Label);
+
+        jobDurationField = new JTextField();
+        jobDurationField.setBounds(200, 190, 300, 25);
+        backgroundPanel.add(jobDurationField);
+        
+        // Deadline Label and Text Field
+        JLabel deadlineLabel = new JLabel("Deadline:");
+        deadlineLabel.setBounds(50, 230, 150, 25);
+        backgroundPanel.add(deadlineLabel);
+        JLabel deadline2Label = new JLabel("(mm-dd-yyyy)");
+        deadline2Label.setBounds(50, 240, 150, 25);
+        backgroundPanel.add(deadline2Label);
+
+        deadlineField = new JTextField();
+        deadlineField.setBounds(200, 230, 300, 25);
+        backgroundPanel.add(deadlineField);
+
+        // Submit Button
+        JButton submitButton = new JButton("Submit");
+        submitButton.setBounds(250, 320, 100, 30);
+        backgroundPanel.add(submitButton);
+
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                saveClientInfo();
+            }
+        });
+        
+     // Back Button
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(50, 320, 100, 30);
+        backButton.setBackground(Color.LIGHT_GRAY);
+        backgroundPanel.add(backButton);
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Close the current window
+                new LoginPage(); 
+            }
+        });
+        
+        
+        setVisible(true);
 	}
+	
+	
 
-	/**
-	 * Create the frame.
-	 */
-	public JobOwner() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(128, 255, 255));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+	private void saveClientInfo() {
+        String clientID = clientIDField.getText().trim();
+        String firstName = firstNameField.getText().trim();
+        String lastName = lastNameField.getText().trim();
+        String jobName = jobNameField.getText().trim();
+        String jobDuration = jobDurationField.getText().trim();
+        String deadline = deadlineField.getText().trim();
+        
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JEditorPane editorPane = new JEditorPane();
-		editorPane.setBounds(166, 139, 190, 19);
-		contentPane.add(editorPane);
-		
-		JButton btnNewButton = new JButton("Login");
-		btnNewButton.setBounds(324, 232, 85, 21);
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		contentPane.add(btnNewButton);
-		
-		JEditorPane dtrpnUsername = new JEditorPane();
-		dtrpnUsername.setBounds(166, 83, 190, 19);
-		contentPane.add(dtrpnUsername);
-		
-		JLabel lblNewLabel = new JLabel("Username:");
-		lblNewLabel.setBounds(48, 83, 78, 19);
-		contentPane.add(lblNewLabel);
-		
-		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(48, 139, 78, 19);
-		contentPane.add(lblPassword);
-		
-		JLabel lblEnterYourClient = new JLabel("Enter your Client information now:");
-		lblEnterYourClient.setBounds(112, 36, 244, 19);
-		contentPane.add(lblEnterYourClient);
-		
-		JButton btnNewButton_1 = new JButton("Forgot Password?");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_1.setBounds(180, 181, 164, 21);
-		contentPane.add(btnNewButton_1);
-		
-		JButton btnNewButton_1_1 = new JButton("Don't have an account? Make one now!");
-		btnNewButton_1_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_1_1.setBounds(10, 232, 265, 21);
-		contentPane.add(btnNewButton_1_1);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(37, 181, 114, 21);
-		contentPane.add(comboBox);
-	}
+        if (clientID.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || jobName.isEmpty() || jobDuration.isEmpty() || deadline.isEmpty() ) {
+            JOptionPane.showMessageDialog(this, "All fields must be filled correctly!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        
+        JOptionPane.showMessageDialog(this, "Submitting your information...\nPlease wait for the Cloud Controller to respond.", "Submitting", JOptionPane.INFORMATION_MESSAGE);
+        
+        boolean isApproved = true; 
+        if (isApproved) {
+            JOptionPane.showMessageDialog(this, "Your job has been APPROVED by the Cloud Controller!", "Approved", JOptionPane.INFORMATION_MESSAGE);
+            String fileName = "VCRTS-DATA";
+            String filePath = FileCreationFinal.createFolder(fileName);
+            FileCreationFinal.jobOwnerFileCreate(filePath, clientID, firstName, lastName, jobName, jobDuration, deadline);
+        } else {
+            JOptionPane.showMessageDialog(this, "Your job has been REJECTED by the Cloud Controller.", "Rejected", JOptionPane.ERROR_MESSAGE);
+            
+        }
+
+        
+        clientIDField.setText("");
+        firstNameField.setText("");
+        lastNameField.setText("");
+        jobNameField.setText("");
+        jobDurationField.setText("");
+        deadlineField.setText("");
+        
+        
+        dispose(); 
+        new Client(); 
+        
+    
+    }
+	
+	
 }
