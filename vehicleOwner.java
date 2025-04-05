@@ -1,66 +1,63 @@
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class vehicleOwner extends JFrame{
-    private String vehicleOwnerID;
-    private String firstName;
-    private String lastName;
-    private ArrayList<String> ownVehicleList;
-    JTextField ownerIDField, firstNameField, lastNameField, makeField, modelField, vinField, residencyTimeField;
+	    private String vehicleOwnerID;
+	    private String firstName;
+	    private String lastName;
+	    private ArrayList<String> ownVehicleList;
+		JTextField ownerIDField, firstNameField, lastNameField, makeField, modelField, vinField, residencyTimeField;
 
-    public vehicleOwner(String vehicleOwnerID, String firstName, String lastName) {
-        this.vehicleOwnerID = vehicleOwnerID;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.ownVehicleList = new ArrayList<>();
-    }
+	    public vehicleOwner(String vehicleOwnerID, String firstName, String lastName) {
+	        this.vehicleOwnerID = vehicleOwnerID;
+	        this.firstName = firstName;
+	        this.lastName = lastName;
+	        this.ownVehicleList = new ArrayList<>();
+	    }
 
-    public String getVehicleOwnerID() {
-        return vehicleOwnerID;
-    }
+	    public String getVehicleOwnerID() {
+	        return vehicleOwnerID;
+	    }
 
-    public String getFirstName() {
-        return firstName;
-    }
+	    public String getFirstName() {
+	        return firstName;
+	    }
 
-    public String getLastName() {
-        return lastName;
-    }
+	    public String getLastName() {
+	        return lastName;
+	    }
 
-    public ArrayList<String> getOwnVehicleList() {
-        return ownVehicleList;
-    }
+	    public ArrayList<String> getOwnVehicleList() {
+	        return ownVehicleList;
+	    }
 
-    public void addVehicle(String vehicleID) {
-        ownVehicleList.add(vehicleID);
-    }
-
-
-
-    public vehicleOwner (){
-        setTitle("Vehicle Information");
-
+	    public void addVehicle(String vehicleID) {
+	        ownVehicleList.add(vehicleID);
+	    }
+	
+	
+	
+	public vehicleOwner (){
+		setTitle("Vehicle Information");
+        
         // Sizing and Operations of the frame
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
-
-
-
+        
+        
+        
         JPanel backgroundPanel = new JPanel();
         backgroundPanel.setLayout(null);
         backgroundPanel.setBackground(new Color(82, 138, 174));
         backgroundPanel.setBounds(0, 0, getWidth(), getHeight());
         add(backgroundPanel);
-
+   
 
         // Owner ID label and Text Field
         JLabel ownerIDLabel = new JLabel("Vehicle Owner ID:");
@@ -127,15 +124,9 @@ public class vehicleOwner extends JFrame{
         submitButton.setBounds(250, 320, 100, 30);
         backgroundPanel.add(submitButton);
 
-        submitButton.addActionListener(e -> { //Surround the saveVehicleInfo with a try and catch
-            try {
-                saveVehicleInfo();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        // Back Button
+        submitButton.addActionListener(e -> saveVehicleInfo());
+        
+     // Back Button
         JButton backButton = new JButton("Back");
         backButton.setBounds(50, 320, 100, 30);
         backButton.setBackground(Color.LIGHT_GRAY);
@@ -145,16 +136,16 @@ public class vehicleOwner extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose(); // Close the current window
-                new LoginPage();
+                new LoginPage(); 
             }
         });
-
-
+            
+            
         setVisible(true);
-
-
-    }
-    private void saveVehicleInfo() throws IOException {
+		
+		
+	}
+	private void saveVehicleInfo() {
         String ownerID = ownerIDField.getText().trim();
         String firstName = firstNameField.getText().trim();
         String lastName = lastNameField.getText().trim();
@@ -162,49 +153,27 @@ public class vehicleOwner extends JFrame{
         String model = modelField.getText().trim();
         String vin = vinField.getText().trim();
         String residencyTime = residencyTimeField.getText().trim();
-        String fileName = "VCRTS-DATA";
+        
 
         if (ownerID.isEmpty() || firstName.isEmpty() || lastName.isEmpty() ||  make.isEmpty() || model.isEmpty() || vin.isEmpty() || residencyTime.isEmpty()) {
             JOptionPane.showMessageDialog(this, "All fields must be filled correctly!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        /*
-        Connect with the TestServer on port 1234. All the inputs will get put into an output stream,
-        where the TestServer will be able to see on the console. Will want to be able to transfer the
-        intormation into the cloud controller and make the cloud controller into the server instead.
-        The save file creation is put into a comment since we do no use that in the client side and
-        instead want the cloud controller to be able to save the file instead.
-        -Jin
-         */
-        try {
-            Socket socket = new Socket("localhost" , 1234);
-            DataInputStream inputStream = new DataInputStream(socket.getInputStream());
-            DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-
-            outputStream.writeUTF(ownerID);
-            outputStream.writeUTF(firstName);
-            outputStream.writeUTF(lastName);
-            outputStream.writeUTF(make);
-            outputStream.writeUTF(model);
-            outputStream.writeUTF(vin);
-            outputStream.writeUTF(residencyTime);
+        
+        JOptionPane.showMessageDialog(this, "Submitting your information...\nPlease wait for the Cloud Controller to respond.", "Submitting", JOptionPane.INFORMATION_MESSAGE);
+        
+        boolean isApproved = true; 
+        if (isApproved) {
+            JOptionPane.showMessageDialog(this, "Your job has been APPROVED by the Cloud Controller!", "Approved", JOptionPane.INFORMATION_MESSAGE);
+            String fileName = "VCRTS-DATA";
+            String filePath = FileCreationFinal.createFolder(fileName);
+            FileCreationFinal.vehicleOwnerFileCreate(filePath, ownerID,firstName,lastName,make,model,vin,residencyTime);
+        } else {
+            JOptionPane.showMessageDialog(this, "Your job has been REJECTED by the Cloud Controller.", "Rejected", JOptionPane.ERROR_MESSAGE);
             
-            JOptionPane.showMessageDialog(this, "Vehicle information saved sent to server!", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this , "Server failed to receive message" , "Error" , JOptionPane.ERROR_MESSAGE);
-        }
-
-        dispose(); // Close VehicleInfo frame
-        new LoginPage();// Sends user back to login screen
-
-        /* This is where you save the file, we do not use it yet since we want cloud controller to do the saving
-
-        String filePath = FileCreationFinal.createFolder(fileName);
-        FileCreationFinal.vehicleOwnerFileCreate(filePath,ownerID, firstName, lastName, make, model, vin, residencyTime);
-        JOptionPane.showMessageDialog(this, "Vehicle information saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        
+        
         ownerIDField.setText("");
         firstNameField.setText("");
         lastNameField.setText("");
@@ -212,11 +181,11 @@ public class vehicleOwner extends JFrame{
         modelField.setText("");
         vinField.setText("");
         residencyTimeField.setText("");
-        dispose();
-        new LoginPage();
-
-        */
+        
+        
+        dispose(); 
+        new Client();
     }
-
-
+	
+	
 }
