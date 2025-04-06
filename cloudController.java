@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class cloudController extends JFrame {
-	
+    private static Properties jobOwnerData = new Properties();
+    private static Properties vehicleOwnerData = new Properties();
+    
 	public static void main(String args[]) {
 		int port = 1234;
 		serverLaunch(port);
@@ -21,7 +24,7 @@ public static void serverLaunch(int port) {
 		String typeOfInput= "Job";
 		try (ServerSocket serverSocket = new ServerSocket(port)) {
 			System.out.println("Server is running on port " + port);
-
+					
 			while (true) {
 				Socket clientSocket = serverSocket.accept();
 				System.out.println("Client is connected");
@@ -81,45 +84,43 @@ public static void serverLaunch(int port) {
     JPanel loginPanel,selectionPanel;
     
     public static void jobOwnerInfo(int port) {
-		
-	  	  try (ServerSocket serverSocket = new ServerSocket(port)) {
-          System.out.println("Server is running on port " + port);
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            System.out.println("Server is running on port " + port);
 
-          while (true) {
-              Socket clientSocket = serverSocket.accept();
-              System.out.println("Client is connected");
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Client is connected");
 
-              DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
+                DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
 
-              // Receiving job owner information
-              String clientID = inputStream.readUTF();
-              String firstName = inputStream.readUTF();
-              String lastName = inputStream.readUTF();
-              String jobName = inputStream.readUTF();
-              String jobDuration = inputStream.readUTF();
-              String deadline = inputStream.readUTF();
+                // Receiving job owner information
+                String clientID = inputStream.readUTF();
+                String firstName = inputStream.readUTF();
+                String lastName = inputStream.readUTF();
+                String jobName = inputStream.readUTF();
+                String jobDuration = inputStream.readUTF();
+                String deadline = inputStream.readUTF();
 
-              System.out.println("Received Vehicle Owner Information:");
-              System.out.println("Client ID: " + clientID);
-              System.out.println("First Name: " + firstName);
-              System.out.println("Last Name: " + lastName);
-              System.out.println("Job Name: " + jobName);
-              System.out.println("Job Duration: " + jobDuration);
-              System.out.println("Deadline: " + deadline);
-             
-              
-              String fileName = "VCRTS-DATA";
-              String filePath = FileCreationFinal.createFolder(fileName);
-              FileCreationFinal.jobOwnerFileCreate(filePath,clientID, firstName, lastName,jobName, jobDuration, deadline);
+                // Save the information to properties object
+                jobOwnerData.setProperty(clientID, firstName + "," + lastName + "," + jobName + "," + jobDuration + "," + deadline);
 
-              clientSocket.close();
-          }
-      } catch (IOException e) {
-          e.printStackTrace();
-          System.out.println("Error: " + e.getMessage());
-      }
-	 
-}
+                // For now, just print the data
+                System.out.println("Received Job Owner Information:");
+                System.out.println("Client ID: " + clientID);
+                System.out.println("First Name: " + firstName);
+                System.out.println("Last Name: " + lastName);
+                System.out.println("Job Name: " + jobName);
+                System.out.println("Job Duration: " + jobDuration);
+                System.out.println("Deadline: " + deadline);
+
+                clientSocket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
     
     public static void vehicleInfo(int port) {
 		  try (ServerSocket serverSocket = new ServerSocket(port)) {
@@ -139,6 +140,9 @@ public static void serverLaunch(int port) {
 	                String model = inputStream.readUTF();
 	                String vin = inputStream.readUTF();
 	                String residencyTime = inputStream.readUTF();
+	                
+	                // Save the information to properties object
+	                vehicleOwnerData.setProperty(ownerID, firstName + "," + lastName + "," + make + "," + model + "," + vin + "," + residencyTime);
 
 	                System.out.println("Received Vehicle Owner Information:");
 	                System.out.println("Owner ID: " + ownerID);
@@ -211,5 +215,61 @@ public static void serverLaunch(int port) {
     setVisible(true);
 
 	}
-	
+	// This accepts the JobOwner data if accepted 
+	public void acceptJobOwnerData(String clientID) {
+	    String data = jobOwnerData.getProperty(clientID);
+	    if (data != null) {
+	        // This is for saving the data to a file
+	        String[] jobDetails = data.split(",");
+	        String firstName = jobDetails[0];
+	        String lastName = jobDetails[1];
+	        String jobName = jobDetails[2];
+	        String jobDuration = jobDetails[3];
+	        String deadline = jobDetails[4];
+
+	        // This tells where to write to the file
+	        String fileName = "VCRTS-DATA";
+	        String filePath = FileCreationFinal.createFolder(fileName);
+	        FileCreationFinal.jobOwnerFileCreate(filePath, clientID, firstName, lastName, jobName, jobDuration, deadline);
+	    }
+	}
+
+	// This deletes the JobOwner data if rejected
+	public void rejectJobOwnerData(String clientID) {
+	    jobOwnerData.remove(clientID); // Simply remove the data from properties
+	    System.out.println("Data for Client ID " + clientID + " has been rejected and removed.");
+	}
+	// This accepts the VehicleOwner data if accepted 
+	public void acceptVehicleOwnerData(String ownerID) {
+	    String data = vehicleOwnerData.getProperty(ownerID);
+	    if (data != null) {
+	        // Parse and save data to a file or another structure
+	        String[] vehicleDetails = data.split(",");
+	        String firstName = vehicleDetails[0];
+	        String lastName = vehicleDetails[1];
+	        String make = vehicleDetails[2];
+	        String model = vehicleDetails[3];
+	        String vin = vehicleDetails[4];
+	        String residencyTime = vehicleDetails[5];
+
+	        // This tells where to write to the file
+	        String fileName = "VCRTS-DATA";
+	        String filePath = FileCreationFinal.createFolder(fileName);
+	        FileCreationFinal.vehicleOwnerFileCreate(filePath, ownerID, firstName, lastName, make, model, vin, residencyTime);
+	    }
+	}
+
+	// This deletes the VehicleOwner data if rejected
+	public void rejectVehicleOwnerData(String ownerID) {
+	    vehicleOwnerData.remove(ownerID); // Simply remove the data from properties
+	    System.out.println("Data for Owner ID " + ownerID + " has been rejected and removed.");
+	}
+	// Getters for front-end access
+    public Properties getJobOwnerData() {
+        return jobOwnerData;
+    }
+
+    public Properties getVehicleOwnerData() {
+        return vehicleOwnerData;
+    }
 }
