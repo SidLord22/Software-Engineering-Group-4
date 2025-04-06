@@ -13,3 +13,7 @@ If accepted, it will be saved into the file, if rejected, it will be gone D:
 ISSUES
 Right now, if accepted, the data will be saved into the JobOwner file. However, this includes vehicle info,
 which we want to save in a vehicleinfo file. I haven't found a solution to that yet.
+Also, I just saw this in the requirements, but we also have to make it so that the server can
+send a message to the clients telling them if the request was accepted or rejected. That might tie in to 
+another issue with the program, where the server closes once a request has been accepted or rejected, basically
+only allowing one request at a time. 
