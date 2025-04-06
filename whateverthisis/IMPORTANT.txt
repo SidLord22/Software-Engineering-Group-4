@@ -1,0 +1,15 @@
+Run cloud controller first, then run main. Cloundcontroller is the server
+When the program is ran, it will start with a launcher that has two buttons that asks the user to either use the client or server.
+if the launcher opens up a smaller launcher, do not be alarmed, there is just two frontend for it
+
+If you select client, you can choose between Job or Vehicle. They will then bring you to a frame that asks the user
+to enter in the information.
+Once entered, a popup will say that it is waiting for the cloudcontroller to accept or reject. After pressing
+ok, a new frame will popup that asks to either accept or reject. 
+(Popup might not immediately show itself, you can spot it in taskbar)
+
+If accepted, it will be saved into the file, if rejected, it will be gone D:
+
+ISSUES
+Right now, if accepted, the data will be saved into the JobOwner file. However, this includes vehicle info,
+which we want to save in a vehicleinfo file. I haven't found a solution to that yet.
