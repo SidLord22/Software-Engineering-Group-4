@@ -4,16 +4,19 @@ import java.awt.Color;
 import java.awt.event.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
 public class jobOwner extends JFrame{
-	private String jobOwnerID;
+    private String jobOwnerID;
     private String firstName;
     private String lastName;
     private ArrayList<String> ownJobList;
-	JTextField clientIDField, firstNameField, lastNameField, jobNameField, jobDurationField, deadlineField;
+    JTextField clientIDField, firstNameField, lastNameField, jobNameField, jobDurationField, deadlineField;
+    private JButton submitButton;
+	
 	
 	public jobOwner(String jobOwnerID, String firstName, String lastName) {
         this.jobOwnerID = jobOwnerID;
@@ -118,7 +121,7 @@ public class jobOwner extends JFrame{
         backgroundPanel.add(deadlineField);
 
         // Submit Button
-        JButton submitButton = new JButton("Submit");
+        submitButton = new JButton("Submit");
         submitButton.setBounds(250, 320, 100, 30);
         backgroundPanel.add(submitButton);
 
@@ -162,20 +165,45 @@ public class jobOwner extends JFrame{
             return;
         }
         
-        
-        JOptionPane.showMessageDialog(this, "Submitting your information...\nPlease wait for the Cloud Controller to respond.", "Submitting", JOptionPane.INFORMATION_MESSAGE);
-        
-        boolean isApproved = true; 
-        if (isApproved) {
-            JOptionPane.showMessageDialog(this, "Your job has been APPROVED by the Cloud Controller!", "Approved", JOptionPane.INFORMATION_MESSAGE);
-            String fileName = "VCRTS-DATA";
-            String filePath = FileCreationFinal.createFolder(fileName);
-            FileCreationFinal.jobOwnerFileCreate(filePath, clientID, firstName, lastName, jobName, jobDuration, deadline);
-        } else {
-            JOptionPane.showMessageDialog(this, "Your job has been REJECTED by the Cloud Controller.", "Rejected", JOptionPane.ERROR_MESSAGE);
-            
-        }
+       
+        JOptionPane waitingPopup = new JOptionPane("Waiting for approval from Cloud Controller...",JOptionPane.INFORMATION_MESSAGE,JOptionPane.DEFAULT_OPTION,null, new Object[]{}, null);  
+        JDialog dialog = waitingPopup.createDialog("Waiting...");
+        dialog.setModal(false); 
+        dialog.setVisible(true);
+        new Thread(() -> {
+        	try (Socket socket = new Socket("localhost", 1234);
+        			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+        			DataInputStream in = new DataInputStream(socket.getInputStream())) 
+        	{
+        		out.writeUTF(clientIDField.getText());
+        		out.writeUTF(firstNameField.getText());
+        		out.writeUTF(lastNameField.getText());
+        		out.writeUTF(jobNameField.getText());
+        		out.writeUTF(jobDurationField.getText());
+        		out.writeUTF(deadlineField.getText());
+        		out.flush();
+        		
+        		boolean isApproved = in.readBoolean();
+        		
+        		dialog.dispose();
+        		
+        		SwingUtilities.invokeLater(() -> {
+        			if (isApproved) {
+        				JOptionPane.showMessageDialog(null, "Job Approved!", "Approval Result",JOptionPane.INFORMATION_MESSAGE);
+        				} else {
+        					JOptionPane.showMessageDialog(null, "Job Rejected.", "Approval Result",JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
 
+                }  catch (EOFException ex) {
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "Server unexpectedly closed the connection.", "Connection Error", JOptionPane.ERROR_MESSAGE));
+                } catch (IOException ex) {
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "Failed to submit job.\nError: " + ex.getMessage(), "Connection Error", JOptionPane.ERROR_MESSAGE));
+                    ex.printStackTrace();
+                }
+            }).start();
+        
+	
         
         clientIDField.setText("");
         firstNameField.setText("");
