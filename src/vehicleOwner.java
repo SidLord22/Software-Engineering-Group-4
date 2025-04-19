@@ -1,7 +1,6 @@
 import javax.swing.*;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -136,7 +135,7 @@ public class vehicleOwner extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose(); // Close the current window
-                new LoginPage(); 
+                new Launcher.LoginPage();
             }
         });
             
@@ -171,7 +170,7 @@ public class vehicleOwner extends JFrame{
         vinField.setText("");
         residencyTimeField.setText("");
         dispose(); 
-        new LoginPage();
+        new Launcher.LoginPage();
     }
 	
 	

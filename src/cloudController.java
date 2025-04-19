@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class cloudController extends JFrame {
 	
@@ -51,7 +50,7 @@ public class cloudController extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             dispose(); // Close the current window
-            new LoginPage(); 
+            new Launcher.LoginPage();
         }
     });
   

@@ -134,7 +134,7 @@ public class jobOwner extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose(); // Close the current window
-                new LoginPage(); 
+                new Launcher.LoginPage();
             }
         });
         
@@ -166,6 +166,6 @@ public class jobOwner extends JFrame{
         deadlineField.setText("");
        
         dispose(); // Close VehicleInfo frame
-        new LoginPage();// Sends user back to login screen
+        new Launcher.LoginPage();// Sends user back to login screen
     }
 }
